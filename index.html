@@ -3,39 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stunning Interactive Website</title>
+    <title>Zenor Tech</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            color: #00ff00;
+            overflow: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Matrix Rain Background */
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Content Container */
         .container {
-            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 20px;
         }
-        .whatsapp-button {
-            background-color: #25D366;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 5px;
+
+        /* Main Panel */
+        .main-panel {
+            background: rgba(0, 0, 0, 0.85);
+            border: 3px solid #00ff00;
+            border-radius: 0;
+            padding: 50px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.5),
+                        inset 0 0 20px rgba(0, 255, 0, 0.1),
+                        0 0 100px rgba(0, 255, 0, 0.3);
+            animation: glitchFrame 0.3s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: scanline 8s linear infinite;
+        }
+
+        .main-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, transparent 0%, rgba(0, 255, 0, 0.05) 2%, transparent 4%, transparent 97%, rgba(0, 255, 0, 0.05) 99%, transparent 100%);
+            background-size: 100% 50px;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes glitchFrame {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            20% { transform: translateX(-2px) translateY(1px); }
+            40% { transform: translateX(2px) translateY(-2px); }
+            60% { transform: translateX(-1px) translateY(2px); }
+            80% { transform: translateX(1px) translateY(-1px); }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 0.98; }
+            100% { opacity: 0.97; }
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .terminal-icon {
+            font-size: 2.5rem;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px #00ff00;
+        }
+
+        @keyframes pulse {
+            0%, 100% { text-shadow: 0 0 20px #00ff00; }
+            50% { text-shadow: 0 0 40px #00ff00, 0 0 60px #00ff00; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ff00;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px rgba(0, 255, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* System Status */
+        .system-status {
+            background: rgba(0, 50, 0, 0.4);
+            border: 2px solid #00ff00;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+        }
+
+        .status-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            animation: blink 1.5s infinite;
+        }
+
+        .status-line:nth-child(even) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0.7; }
+        }
+
+        .status-label {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .status-value {
+            color: #00ff00;
+            text-align: right;
+        }
+
+        /* Description */
+        .description {
+            color: #00ff00;
+            line-height: 1.8;
+            margin: 25px 0;
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            font-family: 'Courier New', monospace;
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            white-space: nowrap;
+            animation: typing 3.5s steps(50, end), blink-cursor 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-cursor {
+            from, to { border-right-color: #00ff00; }
+            50% { border-right-color: transparent; }
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-btn {
+            padding: 15px 20px;
+            background: rgba(0, 100, 0, 0.3);
+            border: 2px solid #00ff00;
+            color: #00ff00;
             text-decoration: none;
-            font-size: 20px;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
         }
-        .whatsapp-button:hover {
-            background-color: #128C7E;
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 0, 0.2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 100, 0, 0.6);
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6),
+                        inset 0 0 20px rgba(0, 255, 0, 0.2);
+            transform: translateY(-2px);
+            text-shadow: 0 0 15px #00ff00;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4),
+                        inset 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: rgba(0, 30, 0, 0.6);
+            border: 2px dashed #00ff00;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #00ff00;
+            position: relative;
+            z-index: 2;
+            overflow-x: auto;
+            border-radius: 0;
+        }
+
+        .code-block code {
+            display: block;
+            line-height: 1.6;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #00ff00;
+            font-size: 0.85rem;
+            color: #00ff00;
+            position: relative;
+            z-index: 2;
+            font-family: 'Courier New', monospace;
+        }
+
+        .cursor-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff00;
+            margin-left: 5px;
+            animation: blink-cursor 0.75s step-end infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-panel {
+                padding: 30px 20px;
+                border-width: 2px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+            }
+
+            .nav-links {
+                grid-template-columns: 1fr;
+            }
+
+            .description {
+                font-size: 0.95rem;
+            }
+
+            .terminal-icon {
+                font-size: 2rem;
+            }
+        }
+
+        /* Holographic Effect */
+        .hologram {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hologram::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            color: #00ff00;
+            overflow: hidden;
+            opacity: 0.8;
+            text-shadow: 0 0 10px #00ff00;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 3px); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -3px); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 1px); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -1px); }
+            80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, 2px); }
+            100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, -3px); }
         }
     </style>
 </head>
 <body>
+    <!-- Matrix Rain Canvas -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Main Content Panel -->
     <div class="container">
-        <h1>Welcome to Our Interactive Website!</h1>
-        <p>For immediate assistance, click the button below to contact us on WhatsApp.</p>
-        <a class="whatsapp-button" href="https://wa.me/254729980068">Contact Us on WhatsApp</a>
+        <div class="main-panel">
+            <!-- Header -->
+            <div class="header">
+                <span class="terminal-icon">⚙️</span>
+                <h1 class="hologram" data-text="MATRIX PROTOCOL">MATRIX PROTOCOL</h1>
+            </div>
+
+            <!-- System Status -->
+            <div class="system-status">
+                <div class="status-line">
+                    <span class="status-label">SYSTEM STATUS</span>
+                    <span class="status-value">● ONLINE</span>
+                </div>
+                <div class="status-line">
+                    <span class="status-label">AI CORE</span>
+                    <span class="status-value">OPERATIONAL</span>
+                </div>
+                <div class="status-line">
+                    <span class="status-label">ENCRYPTION</span>
+                    <span class="status-value">256-BIT QUANTUM</span>
+                </div>
+                <div class="status-line">
+                    <span class="status-label">NETWORK SPEED</span>
+                    <span class="status-value">99.9999% UPTIME</span>
+                </div>
+                <div class="status-line">
+                    <span class="status-label">PROCESSING POWER</span>
+                    <span class="status-value">PETAFLOP CLASS</span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <p class="description">
+                Welcome to the ZENOR PROTOCOL - Advanced Artificial Intelligence System. 
+                This terminal grants access to next-generation quantum computing infrastructure 
+                and distributed ledger technology. Navigate through interdimensional data networks 
+                with neural-adaptive algorithms and self-learning quantum processors.
+            </p>
+
+            <!-- Code Block -->
+            <div class="code-block">
+                <code>
+> INITIALIZE_NEURAL_NETWORK();<br>
+> ESTABLISH_QUANTUM_ENTANGLEMENT();<br>
+> ACTIVATE_GLOBAL_CONSCIOUSNESS();<br>
+<span style="color: #00aa00;">> System ready for advanced operations...</span>
+                </code>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← RETURN HOME</a>
+                <a href="https://github.com/thegrounder254/ZENOR1-XMD" class="nav-btn" target="_blank">ZENOR XMD →</a>
+                <a href="" class="nav-btn">CONTACT US</a>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                > ZENOR TERMINAL v2.0 | NEURAL LINK ENABLED | TIMESTAMP: 2026-02-16T00:00:00Z<span class="cursor-indicator"></span>
+            </div>
+        </div>
     </div>
+
+    <!-- Matrix Rain Script -->
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const context = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const fontSize = 16;
+        const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function draw() {
+            // Semi-transparent black background for fade effect
+            context.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Green text
+            context.fillStyle = '#00ff00';
+            context.font = `${fontSize}px 'Courier New'`;
+            context.shadowColor = 'rgba(0, 255, 0, 0.5)';
+            context.shadowBlur = 10;
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = characters.charAt(Math.floor(Math.random() * characters.length));
+                context.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                // Randomly reset drops
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        // Animation loop
+        setInterval(draw, 50);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Typing effect for description (optional enhancement)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add click effects
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // Create pulse effect
+                    const ripple = document.createElement('span');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(0, 255, 0, 0.8)';
+                    ripple.style.width = '20px';
+                    ripple.style.height = '20px';
+                    ripple.style.pointerEvents = 'none';
+                    ripple.style.animation = 'matrix-ripple 0.6s ease-out';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        });
+
+        // Add CSS animation for ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes matrix-ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
